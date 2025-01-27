@@ -180,6 +180,39 @@ input[type="submit"]{
 	border-radius: 60px ;
 }
 
+/*#region filterButton*/
+
+input[type="button"]{
+	font-family: 'Syne';
+	font-weight: 700;
+	color: #1D6154;
+	background-color: white;
+	/*margin : 2em auto ;*/
+	/*width: 180px;*/
+	height: 35px;
+	text-align: center;
+	border-radius: 60px;
+	border: 1px solid #1D6154;
+}
+
+.filter{
+	display: flex;
+	justify-content: center;
+	gap: 10px;
+	margin: 40px 0;
+}
+
+.filter input[type="button"]{
+	padding: 0 10px;
+}
+
+.filter input:hover{
+	background-color: #1D6154;
+	color: white;
+}
+
+/*#endregion*/
+
 footer nav ul {
 	display: flex;
 	justify-content: flex-end;
