@@ -1,0 +1,57 @@
+.login{
+    font-weight: 600;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    margin-bottom: 200px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    background-color: white;
+}
+
+legend {
+    font-family: 'Syne';
+    font-weight: 700;
+    font-size: 30px;
+    color: #1D6154;
+    margin-bottom: 20px;
+}
+
+label {
+    font-family: 'Work Sans';
+    margin-bottom: 5px;
+    align-self: flex-start;
+}
+
+input[type="text"] {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 20px;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+/*******************/
+input[type="submit"] {
+    font-family: 'Syne';
+    font-weight: 700;
+    color: white;
+    background-color: #1D6154;
+    border: none;
+    border-radius: 50px;
+    padding: 15px 30px;
+    
+}
+
+.forgetPassword {
+    margin-top: 10px;
+    color: black;
+}
