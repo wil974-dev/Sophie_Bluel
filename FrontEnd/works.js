@@ -110,7 +110,7 @@ async function filterWorks(categoryName){
         const reponse = await fetch("http://localhost:5678/api/works");
 
         if(!reponse.ok){
-            throw new Error(`Erreur HTTP : ${reponse.status}`);
+            throw new Error(`Erreur HTTP : ${reponse.status}`);//Retourne le code http de la requête.
         }
 
         const works = await reponse.json();
