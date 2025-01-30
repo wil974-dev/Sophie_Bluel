@@ -16,7 +16,7 @@ document.querySelector("form").addEventListener("submit", async (event) => {
         }
 
         const infoConnection = await response.json();
-        console.log(infoConnection);
+        
         localStorage.setItem("ConnectionToken", infoConnection.token); // Stocker le token.
         window.location.href = "edition.html"; // Redirection vers la page d'accueil.
     } catch (error) {

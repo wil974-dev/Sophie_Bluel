@@ -54,6 +54,9 @@ body {
 	font-size: 14px;
 }
 /*#region mode édition*/
+a{
+	text-decoration: none;
+}
 .headband{
 	display: flex;
 	justify-content: center;
@@ -81,7 +84,11 @@ body {
 	color: black;
 }
 
+.my-project-edition{
+	margin-right: 20px;
+}
 /*#endregion*/
+
 header {
 	display: flex;
 	justify-content: space-between;
@@ -150,11 +157,11 @@ li:hover {
 #introduction p {
 	margin-bottom: 0.5em;
 }
-#portfolio h2 {
-	/*text-align: center;
-	margin-bottom: 1em;*/
-	margin-right: 20px;
+.my-project-index {
+	text-align: center;
+	margin-bottom: 1em;
 }
+
 .gallery {
 	width: 100%;
 	display: grid;

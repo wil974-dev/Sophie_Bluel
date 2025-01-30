@@ -6,14 +6,14 @@
 async function getWorks(){
     try {
         const reponse = await fetch("http://localhost:5678/api/works");
-
+        
         if(!reponse.ok){
             throw new Error(`Erreur HTTP : ${reponse.status}`);
         }
 
         const works = await reponse.json();
-
         showWorks(works);
+        return works;// Retourne les travaux.
     }
     catch(error){
         console.error("Erreur pour la réception des travaux : ", error.message);
@@ -74,7 +74,7 @@ function showWorks(works){
 
 /**
  * Créer un bouton filtre avec un évènement contenant une fonction de tri filterWorks.
- * @param {array} category - Correspond à une categorie.
+ * @param {array} category - Correspond aux categories.
  */
 function createButtonFilter(category){
     
@@ -106,24 +106,13 @@ function createButtonFilter(category){
  * @param {string} categoryName - la catégorie.
  */
 async function filterWorks(categoryName){
-    try{
-        const reponse = await fetch("http://localhost:5678/api/works");
+    const works = await getWorks();
+    const listeWorks = works.filter(work => work.category.name === categoryName);
 
-        if(!reponse.ok){
-            throw new Error(`Erreur HTTP : ${reponse.status}`);//Retourne le code http de la requête.
-        }
-
-        const works = await reponse.json();
-
-        const listeWorks = works.filter(work => work.category.name === categoryName);
-
-        const galleryElement = document.querySelector(".gallery");
+    const galleryElement = document.querySelector(".gallery");
         
-        showWorks(listeWorks);
-    }
-    catch{
-        console.error("Erreur pour la récupération des travaux : ", error.message);
-    }
+    showWorks(listeWorks);
+
 }
 
 
