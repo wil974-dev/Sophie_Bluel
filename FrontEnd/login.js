@@ -17,7 +17,7 @@ document.querySelector("form").addEventListener("submit", async (event) => {
 
         const infoConnection = await response.json();
         
-        localStorage.setItem("ConnectionToken", infoConnection.token); // Stocker le token.
+        localStorage.setItem("connectionToken", infoConnection.token); // Stocker le token.
         window.location.href = "edition.html"; // Redirection vers la page d'accueil.
     } catch (error) {
         if(error.message === "Failed to fetch"){

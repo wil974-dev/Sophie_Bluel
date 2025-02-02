@@ -10,6 +10,7 @@
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="works.js" defer></script>
+	<script src="authorize.js" defer></script>
     <script src="https://kit.fontawesome.com/fbdaa604ff.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -73,5 +74,43 @@
 		</ul>
 	</nav>
 </footer>
+
+<!--Modal-->
+
+<div class="modal-container">
+	<aside id="modal-photo-gallery" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal">
+		<i class="fa-solid fa-xmark"></i>	
+		<h3 id="title-gallery">Galerie photo</h3>
+		<div class="gallery-container">
+
+		</div>
+		<input type="button" value="Ajouter une photo" id="button-add-photo">
+	</aside>
+	<aside id="modal-add-photo" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal">
+		<div class="header-icon">
+			<i class="fa-solid fa-arrow-left"></i>
+			<i class="fa-solid fa-xmark"></i>
+		</div>
+		
+		<h3 id="title-add-photo">Ajout photo</h3>
+		<div class="add-photo-container">
+			<i class="fa-regular fa-image icon-add-photo" style="color: #B9C5CC;"></i>
+			<input type="submit" value="+ Ajouter photo" id="button-add-photo-container">
+			<p>jpg, png : 4mo max</p>
+		</div>
+		<form action="#" method="post">
+			<label for="title">Titre</label>
+			<input type="text" name="title" id="title">
+			<label for="category">Catégorie</label>
+			<select id="category" name="category">
+				<option value="categoryUnExemple">Category un exemple</option>
+				<option value="categoryDeuxExemple">Category deux exemple</option>
+			</select>
+			<div class="underline"></div>
+			<input type="submit" value="valider" id="button-validate-add-photo">
+		</form>
+	</aside>
+</div>
+
 </body>
 </html>
