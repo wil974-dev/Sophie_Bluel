@@ -11,7 +11,9 @@
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="works.js" defer></script>
 	<script src="authorize.js" defer></script>
+	<script src="modal.js" defer></script>
     <script src="https://kit.fontawesome.com/fbdaa604ff.js" crossorigin="anonymous"></script>
+
 </head>
 <body>
     <div class="headband">
@@ -46,7 +48,7 @@
         <div class="project-edition">
             <h2 class="my-project-edition">Mes Projets</h2>
             <i class="fa-regular fa-pen-to-square" style="color: black;"></i>
-            <a href="#">modifier</a>
+            <a href="#" id="open-modal">modifier</a>
         </div>
 		
 		<div class="filter"></div>
@@ -78,24 +80,24 @@
 <!--Modal-->
 
 <div class="modal-container">
-	<aside id="modal-photo-gallery" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal">
-		<i class="fa-solid fa-xmark"></i>	
+	<aside id="modal-photo-gallery" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal-gallery" aria-modal="false">
+		<i class="fa-solid fa-xmark icon-close"></i>	
 		<h3 id="title-gallery">Galerie photo</h3>
 		<div class="gallery-container">
 
 		</div>
 		<input type="button" value="Ajouter une photo" id="button-add-photo">
 	</aside>
-	<aside id="modal-add-photo" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal">
+	<aside id="modal-add-photo" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal-add-photo" aria-modal="false">
 		<div class="header-icon">
-			<i class="fa-solid fa-arrow-left"></i>
-			<i class="fa-solid fa-xmark"></i>
+			<i class="fa-solid fa-arrow-left icon-back"></i>
+			<i class="fa-solid fa-xmark icon-close"></i>
 		</div>
 		
 		<h3 id="title-add-photo">Ajout photo</h3>
 		<div class="add-photo-container">
 			<i class="fa-regular fa-image icon-add-photo" style="color: #B9C5CC;"></i>
-			<input type="submit" value="+ Ajouter photo" id="button-add-photo-container">
+			<input type="button" value="+ Ajouter photo" id="button-add-photo-container">
 			<p>jpg, png : 4mo max</p>
 		</div>
 		<form action="#" method="post">
