@@ -1,3 +1,4 @@
+let works = getWorks();
 
 /**
  * Récupère les travaux sur le serveur et les affiches avec
@@ -13,12 +14,11 @@ async function getWorks(){
 
         const works = await reponse.json();
         showWorks(works);
-        return works;// Retourne les travaux.
+        return works;// Retourne une promesse.
     }
     catch(error){
-        console.error("Erreur pour la réception des travaux : ", error.message);
+        console.error("Erreur : ", error.message);
     }
-    
 
 }
 
@@ -42,7 +42,7 @@ async function getCategory(){
         createButtonFilter(categories);
     }
     catch(error){
-        console.error("Erreur pour la récupération des catégories : ", error.message);
+        console.error("Erreur : ", error.message);
     }
     
 }
@@ -64,6 +64,7 @@ function showWorks(works){
         const figcaptionElement = document.createElement("figcaption");
 
         imgElement.src = works[i].imageUrl;
+        imgElement.alt = works[i].title;
         figcaptionElement.innerText = works[i].title;
 
         figureElement.appendChild(imgElement);
@@ -118,3 +119,4 @@ async function filterWorks(categoryName){
 
 getWorks();
 getCategory();
+

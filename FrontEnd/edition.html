@@ -8,7 +8,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
-	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="stylesheet" href="./assets/style.css"><!--A changer après les tests-->
 	<script src="works.js" defer></script>
 	<script src="authorize.js" defer></script>
 	<script src="modal.js" defer></script>
@@ -83,9 +83,10 @@
 	<aside id="modal-photo-gallery" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal-gallery" aria-modal="false">
 		<i class="fa-solid fa-xmark icon-close"></i>	
 		<h3 id="title-gallery">Galerie photo</h3>
-		<div class="gallery-container">
+		<div class="gallery-modal">
 
 		</div>
+		<div class="underline"></div>
 		<input type="button" value="Ajouter une photo" id="button-add-photo">
 	</aside>
 	<aside id="modal-add-photo" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal-add-photo" aria-modal="false">
@@ -108,7 +109,7 @@
 				<option value="categoryUnExemple">Category un exemple</option>
 				<option value="categoryDeuxExemple">Category deux exemple</option>
 			</select>
-			<div class="underline"></div>
+			<div class="underline-add-photo"></div>
 			<input type="submit" value="valider" id="button-validate-add-photo">
 		</form>
 	</aside>

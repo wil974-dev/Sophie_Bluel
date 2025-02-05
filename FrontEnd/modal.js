@@ -13,6 +13,9 @@ function openModal(modal){
     modal.style.display = "flex";
     modal.setAttribute("aria-hidden", "false");
     modal.setAttribute("aria-modal", "true");
+    if(modal === modalPhotoGallery){
+        getWorksAndShow();
+    }
 }
 
 function closeModal(modal){
@@ -68,5 +71,84 @@ iconBack.addEventListener("click", () => {
     closeModal(modalAddPhoto);
     openModal(modalPhotoGallery);
 })
+
+/********************Fonction affichage************************/
+/**
+ * Récupére les travaux et les affiches.
+ * @returns Retourne une promesse
+ */
+async function getWorksAndShow(){
+    try {
+        const reponse = await fetch("http://localhost:5678/api/works");
+        
+        if(!reponse.ok){
+            throw new Error(`Erreur HTTP : ${reponse.status}`);
+        }
+
+        const works = await reponse.json();
+        showWorksDelete(works);
+        return works;// Retourne une promesse.
+    }
+    catch(error){
+        console.error("Erreur : ", error.message);
+    }
+}
+
+/**
+ * 
+ * @param {array} works Affiche les travaux avec une icone de suppression.
+ */
+function showWorksDelete(works){
+    const galleryModalElement = document.querySelector(".gallery-modal");
+    const trashCanCode = '<i class="fa-solid fa-trash-can"></i>';
+
+    galleryModalElement.innerHTML = "";
+    
+    for(let i = 0; i < works.length; i++){
+        const figureElement = document.createElement("figure");
+        const imgElement = document.createElement("img");
+        const trashCanElement = document.createElement("div");
+
+        imgElement.src = works[i].imageUrl;
+        imgElement.alt = works[i].title;
+        trashCanElement.setAttribute("class", "delete-icon");
+        trashCanElement.innerHTML = trashCanCode;
+
+        figureElement.appendChild(imgElement);
+        figureElement.appendChild(trashCanElement);
+        galleryModalElement.appendChild(figureElement);
+
+        trashCanElement.addEventListener("click", () => {
+            deleteWork(works[i].id);//Supprime
+            showWorksDelete(works);//Affichage des travaux restant
+        });
+    }
+}
+
+/**
+ * Supprime le travail avec l'id correspondant à celui passer en paramètres.
+ * @param {number} id l'id de l'élément travail à supprimer.
+ */
+async function deleteWork(id){
+    try{
+        const reponse = await fetch(`http://localhost:5678/api/works/${id}`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("connectionToken")}`,
+                "Accept": "*/*"
+                }
+            });
+
+        if(reponse.ok){
+            console.log("Le travail à été supprimer.");
+        }
+
+        }catch(error){  
+        console.log("erreur: ", error.message);
+    }
+}
+
+console.log(localStorage.getItem("connectionToken"));
+
 
 
