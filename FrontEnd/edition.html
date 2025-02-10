@@ -27,7 +27,7 @@
 		<ul>
 			<li>projets</li>
 			<li>contact</li>
-			<li>logout</li>
+			<li id="logout">logout</li>
 			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 		</ul>
 	</nav>
@@ -98,16 +98,15 @@
 		<h3 id="title-add-photo">Ajout photo</h3>
 		<div class="add-photo-container">
 			<i class="fa-regular fa-image icon-add-photo" style="color: #B9C5CC;"></i>
+			<input type="file" id="imgImport" accept="image/png, image/jpeg" style="display:none">
 			<input type="button" value="+ Ajouter photo" id="button-add-photo-container">
 			<p>jpg, png : 4mo max</p>
 		</div>
-		<form action="#" method="post">
+		<form action="#" method="post" id="form-add-photo">
 			<label for="title">Titre</label>
 			<input type="text" name="title" id="title">
 			<label for="category">Catégorie</label>
 			<select id="category" name="category">
-				<option value="categoryUnExemple">Category un exemple</option>
-				<option value="categoryDeuxExemple">Category deux exemple</option>
 			</select>
 			<div class="underline-add-photo"></div>
 			<input type="submit" value="valider" id="button-validate-add-photo">

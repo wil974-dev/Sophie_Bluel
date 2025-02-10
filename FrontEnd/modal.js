@@ -13,8 +13,17 @@ function openModal(modal){
     modal.style.display = "flex";
     modal.setAttribute("aria-hidden", "false");
     modal.setAttribute("aria-modal", "true");
-    if(modal === modalPhotoGallery){
+    /*if(modal === modalPhotoGallery){
         getWorksAndShow();
+    }*/
+    switch(modal){
+        case modalPhotoGallery:
+            getWorksAndShow();
+            break;
+        case modalAddPhoto:
+            getCategoryModal();
+            AddPhoto();
+            break;
     }
 }
 
@@ -29,6 +38,7 @@ function switchModal(){
 }
 
 /***************Evénements****************/
+
 
 LinkOpenModal.addEventListener("click", () => {
     modalContainer.style.display = "flex";
@@ -49,7 +59,6 @@ iconCloseModal.forEach((icon) => {
 
 
 //Fermeture de la modale quand on clique à l'extérieur
-
 modalContainer.addEventListener("click", (event) => {
     if(!modalPhotoGallery.contains(event.target) && !modalAddPhoto.contains(event.target)){
         modalContainer.style.display = "none";
@@ -62,17 +71,27 @@ modalContainer.addEventListener("click", (event) => {
     }
 });
 
+
+
+//Gère le changement de modal quand le bouton ajouter photo est appuyé
 buttonAddPhoto.addEventListener("click", () => {
     closeModal(modalPhotoGallery);
     openModal(modalAddPhoto);
 });
 
+
+//Gére le bouton retour sur la modal add photo.
 iconBack.addEventListener("click", () => {
+    createAddPhotoContainer();
     closeModal(modalAddPhoto);
     openModal(modalPhotoGallery);
+    //Vide l'image si il à été ajouter.
+    const fileImg = document.getElementById("imgImport");
+    fileImg.value = " ";
 })
 
 /********************Fonction affichage************************/
+
 /**
  * Récupére les travaux et les affiches.
  * @returns Retourne une promesse
@@ -98,7 +117,7 @@ async function getWorksAndShow(){
  * 
  * @param {array} works Affiche les travaux avec une icone de suppression.
  */
-function showWorksDelete(works){
+async function showWorksDelete(works){
     const galleryModalElement = document.querySelector(".gallery-modal");
     const trashCanCode = '<i class="fa-solid fa-trash-can"></i>';
 
@@ -134,13 +153,15 @@ async function deleteWork(id){
         const reponse = await fetch(`http://localhost:5678/api/works/${id}`, {
             method: "DELETE",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem("connectionToken")}`,
-                "Accept": "*/*"
+                //"accept": "*/*",
+                "Authorization": `Bearer ${localStorage.getItem("connectionToken")}`
                 }
             });
 
         if(reponse.ok){
-            console.log("Le travail à été supprimer.");
+            console.log("Le travail a été supprimé.");
+        }else{
+            console.log("Pas authoriser");
         }
 
         }catch(error){  
@@ -148,7 +169,137 @@ async function deleteWork(id){
     }
 }
 
-console.log(localStorage.getItem("connectionToken"));
+
+/**
+ * Récupère les catégories sur le serveur.
+ */
+async function getCategoryModal(){
+    try{
+        const reponse = await fetch("http://localhost:5678/api/categories");
+        if(!reponse.ok){
+            throw new Error("Erreur lors de la récupération des categories.");
+        }
+
+        const categories = await reponse.json();
+        showCategoriesModal(categories);
+
+    }catch(error){
+        console.log("Erreur: ", error.message);
+    }
+  
+}
+
+/**
+ * Affiche les catégories dans la liste déroulante de la modale.
+ * @param {array} categories 
+ */
+function showCategoriesModal(categories){
+    const selectElement = document.getElementById("category");
+    selectElement.innerHTML = "";
+    categories.forEach(cat => {
+        const optionElement = document.createElement("option");
+        
+        optionElement.setAttribute("value", cat.id);
+        optionElement.innerText = cat.name;
+
+        selectElement.appendChild(optionElement);
+    });
+}
+
+function AddPhoto(){
+    const inputFile = document.getElementById("imgImport");
+    const buttonAddPhoto = document.getElementById("button-add-photo-container");
+
+    buttonAddPhoto.addEventListener("click", () => {
+        inputFile.click();
+    });
+    
+    inputFile.addEventListener("change", (e) => {
+        const fileImg = inputFile.files[0];// Récupère l'image à l'indice 0.
+        const addPhotoContainer = document.querySelector(".add-photo-container");
+        const imgElement = document.createElement("img");
+
+        if(!fileImg.type){
+            alert("Aucun fichier sélectionner.");
+        }
+        else if(fileImg.type.startsWith("image/")){
+            addPhotoContainer.innerHTML = "";
+            const reader = new FileReader();
+            reader.readAsDataURL(e.target.files[0]);
+
+            reader.onload = (event) => {
+            imgElement.src = event.target.result;
+            addPhotoContainer.appendChild(imgElement);
+            };}
+        else{
+            alert("Veuillez choisir une image au format jpeg/png.");
+        }
+    });
+}
 
 
+/**
+ * Fonction pour la mise à jour de l'affichage du add-photo-container si on appuye sur la flêche retour.
+ */
+function createAddPhotoContainer(){
+    const addPhotoContainer = document.querySelector(".add-photo-container");
+    addPhotoContainer.innerHTML = `<i class="fa-regular fa-image icon-add-photo" style="color: #B9C5CC;"></i>
+			<input type="file" id="imgImport" accept="image/png, image/jpeg" style="display:none">
+			<input type="button" value="+ Ajouter photo" id="button-add-photo-container">
+			<p>jpg, png : 4mo max</p>`;
+}
 
+function addWorks(){
+    const buttonSubmitWork = document.getElementById("button-validate-add-photo");
+    const fileImg = document.getElementById("imgImport");
+    const title = document.getElementById("title");
+    const category = document.getElementById("category");
+    const formElement = document.getElementById("form-add-photo");
+    
+
+    buttonSubmitWork.addEventListener("click", async (event) => {
+        event.preventDefault();
+        //Vérification de la présence d'une image et d'un titre.
+        if(!fileImg.files[0]){
+            alert("Veuillez insérer une image");
+            return;
+        }
+        if(!title){
+            alert("Veuillez spécifier un titre");
+            return;
+        }
+        console.log(fileImg.files[0]);
+        const formData = new FormData();
+        formData.append("image", fileImg.files[0]);
+        formData.append("title", title.value);
+        formData.append("category", category.value);
+        console.log("Contenu du FormData :");
+for (const [key, value] of formData.entries()) {
+    console.log(`${key}:`, value);
+}
+        try{
+            const response = await fetch("http://localhost:5678/api/works", {
+                method: "POST",
+                headers:{
+                        "Authorization": `Bearer ${localStorage.getItem("connectionToken")}`
+                    },
+                    body: formData
+                });
+                if(response.ok){
+                    alert("L'image été ajoutée avec succès !");
+                    getWorksAndShow();
+                    formElement.reset();
+                    createAddPhotoContainer();
+                }
+
+            }catch(error){
+                console.log("Erreur lors de l'ajout :", error);
+                alert("Une erreur est survenue lors de l'envoi");
+            }
+
+    });
+
+   
+}
+
+addWorks();

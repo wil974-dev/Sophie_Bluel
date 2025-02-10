@@ -18,7 +18,7 @@ document.querySelector("form").addEventListener("submit", async (event) => {
         const infoConnection = await response.json();
         
         localStorage.setItem("connectionToken", infoConnection.token); // Stocker le token.
-        window.location.href = "edition.html"; // Redirection vers la page d'accueil.
+        window.location.href = "edition.html"; // Redirection vers la page d'édition.
     } catch (error) {
         if(error.message === "Failed to fetch"){
             alert("Echec de la connexion");
@@ -29,3 +29,4 @@ document.querySelector("form").addEventListener("submit", async (event) => {
        
     }
 });
+
