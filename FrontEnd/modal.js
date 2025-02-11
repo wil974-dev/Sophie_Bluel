@@ -13,16 +13,18 @@ function openModal(modal){
     modal.style.display = "flex";
     modal.setAttribute("aria-hidden", "false");
     modal.setAttribute("aria-modal", "true");
-    /*if(modal === modalPhotoGallery){
-        getWorksAndShow();
-    }*/
+    
+    //Je déplace le focus sur la modale pour que ne pas avoir d'erreur accessibilitée
+    modal.setAttribute("tabindex", "-1");
+    modal.focus();
+
     switch(modal){
         case modalPhotoGallery:
             getWorksAndShow();
             break;
         case modalAddPhoto:
             getCategoryModal();
-            AddPhoto();
+            //addPhoto();
             break;
     }
 }
@@ -31,10 +33,9 @@ function closeModal(modal){
     modal.style.display = "none";
     modal.setAttribute("aria-hidden", "true");
     modal.setAttribute("aria-modal", "false");
-}
 
-function switchModal(){
-
+    //Je remet le focus sur un élément visible
+    document.getElementById("open-modal").focus();
 }
 
 /***************Evénements****************/
@@ -53,6 +54,7 @@ iconCloseModal.forEach((icon) => {
     }
     else if(modalAddPhoto.style.display === "flex"){
         closeModal(modalAddPhoto);
+        switchPhotoDisplay(false);
     }
     })
 });
@@ -82,12 +84,12 @@ buttonAddPhoto.addEventListener("click", () => {
 
 //Gére le bouton retour sur la modal add photo.
 iconBack.addEventListener("click", () => {
-    createAddPhotoContainer();
+    switchPhotoDisplay(false);
     closeModal(modalAddPhoto);
     openModal(modalPhotoGallery);
     //Vide l'image si il à été ajouter.
-    const fileImg = document.getElementById("imgImport");
-    fileImg.value = " ";
+    const formFileImg = document.querySelector(".form-add-photo");
+    formFileImg.reset();
 })
 
 /********************Fonction affichage************************/
@@ -114,8 +116,8 @@ async function getWorksAndShow(){
 }
 
 /**
- * 
- * @param {array} works Affiche les travaux avec une icone de suppression.
+ * Affiche les travaux avec une icone de suppression.
+ * @param {array} works 
  */
 async function showWorksDelete(works){
     const galleryModalElement = document.querySelector(".gallery-modal");
@@ -137,9 +139,11 @@ async function showWorksDelete(works){
         figureElement.appendChild(trashCanElement);
         galleryModalElement.appendChild(figureElement);
 
-        trashCanElement.addEventListener("click", () => {
+        trashCanElement.addEventListener("click", async (event) => {
+            event.stopPropagation();//Empêche la fermeture de la modale.
             deleteWork(works[i].id);//Supprime
-            showWorksDelete(works);//Affichage des travaux restant
+            const updateWorks = await getWorksAndShow();
+            showWorksDelete(updateWorks);//Affichage des travaux restant
         });
     }
 }
@@ -206,55 +210,80 @@ function showCategoriesModal(categories){
     });
 }
 
-function AddPhoto(){
+/**
+ * 
+ */
+function addPhoto(){
     const inputFile = document.getElementById("imgImport");
-    const buttonAddPhoto = document.getElementById("button-add-photo-container");
-
-    buttonAddPhoto.addEventListener("click", () => {
-        inputFile.click();
-    });
+    const buttonAddPhoto = document.getElementById("button-form-add-photo");
     
-    inputFile.addEventListener("change", (e) => {
+    function openFileImgImport(){
+        inputFile.click();
+    }
+
+    buttonAddPhoto.addEventListener("click", openFileImgImport);
+
+
+
+
+    /**
+     * Fonction qui affiche la photo sélectionner avec gestions d'erreur.
+     * @param {*} e 
+     */
+    function printPhoto(e){
         const fileImg = inputFile.files[0];// Récupère l'image à l'indice 0.
-        const addPhotoContainer = document.querySelector(".add-photo-container");
-        const imgElement = document.createElement("img");
+        const imgPreview = document.getElementById("imgPreview");
+
+        console.log(e);
 
         if(!fileImg.type){
             alert("Aucun fichier sélectionner.");
         }
-        else if(fileImg.type.startsWith("image/")){
-            addPhotoContainer.innerHTML = "";
+        
+        if(fileImg.type.startsWith("image/")){
             const reader = new FileReader();
             reader.readAsDataURL(e.target.files[0]);
 
             reader.onload = (event) => {
-            imgElement.src = event.target.result;
-            addPhotoContainer.appendChild(imgElement);
+            imgPreview.src = event.target.result;
+            switchPhotoDisplay(true);
+            
             };}
         else{
             alert("Veuillez choisir une image au format jpeg/png.");
         }
-    });
-}
+    }
 
+    inputFile.addEventListener("change", printPhoto);
+
+}
 
 /**
- * Fonction pour la mise à jour de l'affichage du add-photo-container si on appuye sur la flêche retour.
+ * 
+ * @param {boolean} showImage - True pour afficher l'image et false pour afficher le boutton ajout de photo
  */
-function createAddPhotoContainer(){
-    const addPhotoContainer = document.querySelector(".add-photo-container");
-    addPhotoContainer.innerHTML = `<i class="fa-regular fa-image icon-add-photo" style="color: #B9C5CC;"></i>
-			<input type="file" id="imgImport" accept="image/png, image/jpeg" style="display:none">
-			<input type="button" value="+ Ajouter photo" id="button-add-photo-container">
-			<p>jpg, png : 4mo max</p>`;
+function switchPhotoDisplay(showImage){
+    const viewPhoto = document.querySelector(".view-photo");
+    const formAddPhoto = document.querySelector(".form-add-photo");
+
+    if(showImage){
+        viewPhoto.style.display = "block";
+        formAddPhoto.style.display = "none";
+    }else{
+        viewPhoto.style.display = "none";
+        formAddPhoto.style.display = "block";
+    }
 }
 
+/**
+ * 
+ */
 function addWorks(){
     const buttonSubmitWork = document.getElementById("button-validate-add-photo");
     const fileImg = document.getElementById("imgImport");
     const title = document.getElementById("title");
     const category = document.getElementById("category");
-    const formElement = document.getElementById("form-add-photo");
+    const formElement = document.getElementById("form-info-photo");
     
 
     buttonSubmitWork.addEventListener("click", async (event) => {
@@ -273,10 +302,9 @@ function addWorks(){
         formData.append("image", fileImg.files[0]);
         formData.append("title", title.value);
         formData.append("category", category.value);
-        console.log("Contenu du FormData :");
-for (const [key, value] of formData.entries()) {
-    console.log(`${key}:`, value);
-}
+        
+       
+
         try{
             const response = await fetch("http://localhost:5678/api/works", {
                 method: "POST",
@@ -289,17 +317,15 @@ for (const [key, value] of formData.entries()) {
                     alert("L'image été ajoutée avec succès !");
                     getWorksAndShow();
                     formElement.reset();
-                    createAddPhotoContainer();
+                    switchPhotoDisplay(false);
+                    
                 }
-
             }catch(error){
                 console.log("Erreur lors de l'ajout :", error);
                 alert("Une erreur est survenue lors de l'envoi");
             }
-
     });
-
-   
 }
 
 addWorks();
+addPhoto();

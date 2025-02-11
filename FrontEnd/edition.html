@@ -18,7 +18,7 @@
 <body>
     <div class="headband">
         <i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></i>
-        <a href="#">Mode édition</a>
+        <p>Mode édition</p>
     </div>
 <header>
     
@@ -97,12 +97,17 @@
 		
 		<h3 id="title-add-photo">Ajout photo</h3>
 		<div class="add-photo-container">
-			<i class="fa-regular fa-image icon-add-photo" style="color: #B9C5CC;"></i>
-			<input type="file" id="imgImport" accept="image/png, image/jpeg" style="display:none">
-			<input type="button" value="+ Ajouter photo" id="button-add-photo-container">
-			<p>jpg, png : 4mo max</p>
+			<div class="view-photo" style="display: none;">
+				<img src="" alt="" id="imgPreview">
+			</div>
+			<form action="#" method="post" class="form-add-photo">
+				<i class="fa-regular fa-image icon-add-photo" style="color: #B9C5CC;"></i>
+				<input type="file" id="imgImport" accept="image/png, image/jpeg" style="display:none">
+				<input type="button" value="+ Ajouter photo" id="button-form-add-photo">
+				<p>jpg, png : 4mo max</p>
+			</form>
 		</div>
-		<form action="#" method="post" id="form-add-photo">
+		<form action="#" method="post" id="form-info-photo">
 			<label for="title">Titre</label>
 			<input type="text" name="title" id="title">
 			<label for="category">Catégorie</label>

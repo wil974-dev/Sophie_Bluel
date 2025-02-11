@@ -456,3 +456,15 @@ select{
 	object-fit: contain;
 }
 /*#endregion*/
+
+.login a{
+	color: black;
+}
+
+.login a:hover {
+	color: #B1663C;
+}
+
+.forgetPassword{
+	text-decoration: underline;
+}
