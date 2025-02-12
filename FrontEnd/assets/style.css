@@ -172,11 +172,11 @@ li:hover {
 
 .gallery img {
 	width: 100%;
-
 }
+
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
@@ -270,17 +270,12 @@ footer nav ul {
 	align-items: center;
 }
 
-.modal{
-	
-}
-
 #modal-photo-gallery{
 	display: none;
 	/*display: flex;*/
 	flex-direction: column;
-	gap: 30px;
+	gap: 40px;
 	align-items: center;
-	justify-content: space-around;
 	width: 50%;
 	max-width: 700px;
 	height: 70%;
@@ -289,8 +284,6 @@ footer nav ul {
 	border-radius: 10px;
 	overflow-y: auto;
 }
-
-
 
 .gallery-container{
 	height: 70%;
@@ -310,7 +303,8 @@ footer nav ul {
 #modal-photo-gallery .icon-close{
 	align-self: flex-end;
 	margin-right: 20px;
-    font-size: 24px;
+	margin-top: 11px;
+    font-size: 20px;
 }
 
 .modal-container h3{
@@ -322,8 +316,11 @@ footer nav ul {
     /*width: 70%;*/
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-template-rows: 1fr 1fr 1fr;
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
+	height: 55%;
+	overflow: auto;
 }
 
 .gallery-modal figure{
@@ -344,7 +341,7 @@ footer nav ul {
 .underline{
     border-bottom: 1px solid #B3B3B3;
     height: 1px;
-    width: 80%;
+    width: 70%;
 }
 
 .delete-icon{
@@ -381,21 +378,37 @@ footer nav ul {
 }
 
 .add-photo-container{
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: space-around;
 	background-color: #E8F1F6;
 	border-radius: 3px;
 	height: 30%;
 	width: 60%;
 }
 
+.form-info-photo{
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content:space-around;
+	
+}
+
 .icon-add-photo{
+	margin-top: 10px;
 	font-size: 75px;
 }
 
-#button-add-photo-container{
+.form-add-photo{
+    display: flex;
+	flex-direction: column;
+    width: 100%;
+    height: 100%;
+    /*padding-top: 10px;*/
+
+    align-items: center;
+	gap: 20px;
+}
+
+#button-form-add-photo{
 	background-color:#CBD6DC;
 	color: #306685;
 	border: none;
@@ -424,7 +437,7 @@ select{
 
 .underline-add-photo{
 	border-bottom: 1px solid #B3B3B3;
-	/*margin-top: 35px;*/
+	margin-top: 25px;
 }
 
 #button-validate-add-photo{
@@ -448,6 +461,13 @@ select{
 .header-icon i{
 	margin: 0 20px;
 	font-size: 20px;
+}
+
+.view-photo {
+    /*display: flex;*/
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .add-photo-container img{

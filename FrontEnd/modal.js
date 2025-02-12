@@ -24,7 +24,6 @@ function openModal(modal){
             break;
         case modalAddPhoto:
             getCategoryModal();
-            //addPhoto();
             break;
     }
 }
@@ -64,6 +63,7 @@ iconCloseModal.forEach((icon) => {
 modalContainer.addEventListener("click", (event) => {
     if(!modalPhotoGallery.contains(event.target) && !modalAddPhoto.contains(event.target)){
         modalContainer.style.display = "none";
+        switchPhotoDisplay(false);
         if(modalPhotoGallery.style.display === "flex"){
             closeModal(modalPhotoGallery);
         }
@@ -89,7 +89,7 @@ iconBack.addEventListener("click", () => {
     openModal(modalPhotoGallery);
     //Vide l'image si il à été ajouter.
     const formFileImg = document.querySelector(".form-add-photo");
-    formFileImg.reset();
+    //formFileImg.reset();
 })
 
 /********************Fonction affichage************************/
@@ -267,11 +267,11 @@ function switchPhotoDisplay(showImage){
     const formAddPhoto = document.querySelector(".form-add-photo");
 
     if(showImage){
-        viewPhoto.style.display = "block";
+        viewPhoto.style.display = "flex";
         formAddPhoto.style.display = "none";
     }else{
         viewPhoto.style.display = "none";
-        formAddPhoto.style.display = "block";
+        formAddPhoto.style.display = "flex";
     }
 }
 
@@ -288,12 +288,14 @@ function addWorks(){
 
     buttonSubmitWork.addEventListener("click", async (event) => {
         event.preventDefault();
+        
         //Vérification de la présence d'une image et d'un titre.
         if(!fileImg.files[0]){
             alert("Veuillez insérer une image");
             return;
         }
-        if(!title){
+        if(!title.value){
+            
             alert("Veuillez spécifier un titre");
             return;
         }
@@ -326,6 +328,8 @@ function addWorks(){
             }
     });
 }
+
+//document.getElementById("button-form-add-photo").addEventListener("")
 
 addWorks();
 addPhoto();
