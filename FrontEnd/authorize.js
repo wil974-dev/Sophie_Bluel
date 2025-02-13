@@ -18,7 +18,7 @@ window.addEventListener("load", verifyAuthorize);//Rechargement de la page
 function logOut(){
     const linkLogOut = document.getElementById("logout");
     linkLogOut.addEventListener("click", () => {
-        localStorage.clear();
+        localStorage.clear();//Cibler que le token
         alert("Déconnexion");
         window.location.href = "index.html";
     });

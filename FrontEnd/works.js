@@ -1,5 +1,3 @@
-let works = getWorks();
-
 /**
  * Récupère les travaux sur le serveur et les affiches avec
  * la fonction showWorks().
@@ -14,7 +12,7 @@ async function getWorks(){
 
         const works = await reponse.json();
         showWorks(works);
-        return works;// Retourne une promesse.
+        return works;
     }
     catch(error){
         console.error("Erreur : ", error.message);
@@ -46,9 +44,6 @@ async function getCategory(){
     }
     
 }
-
-
-
 
 /**
  * Efface les éléments et affiche tous les travaux dans la class gallery.

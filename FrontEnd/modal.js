@@ -7,6 +7,7 @@ const modalAddPhoto = document.getElementById("modal-add-photo");
 const buttonAddPhoto = document.getElementById("button-add-photo");
 const LinkOpenModal = document.getElementById("open-modal");
 const iconBack = document.querySelector(".icon-back");
+
  /****************Fonction***************/
 
 function openModal(modal){
@@ -88,7 +89,7 @@ iconBack.addEventListener("click", () => {
     closeModal(modalAddPhoto);
     openModal(modalPhotoGallery);
     //Vide l'image si il à été ajouter.
-    const formFileImg = document.querySelector(".form-add-photo");
+    //const formFileImg = document.querySelector(".form-add-photo");
     //formFileImg.reset();
 })
 
@@ -108,6 +109,7 @@ async function getWorksAndShow(){
 
         const works = await reponse.json();
         showWorksDelete(works);
+        showWorks(works);
         return works;// Retourne une promesse.
     }
     catch(error){
@@ -117,7 +119,7 @@ async function getWorksAndShow(){
 
 /**
  * Affiche les travaux avec une icone de suppression.
- * @param {array} works 
+ * @param {array} works
  */
 async function showWorksDelete(works){
     const galleryModalElement = document.querySelector(".gallery-modal");
@@ -157,7 +159,6 @@ async function deleteWork(id){
         const reponse = await fetch(`http://localhost:5678/api/works/${id}`, {
             method: "DELETE",
             headers: {
-                //"accept": "*/*",
                 "Authorization": `Bearer ${localStorage.getItem("connectionToken")}`
                 }
             });
@@ -165,7 +166,7 @@ async function deleteWork(id){
         if(reponse.ok){
             console.log("Le travail a été supprimé.");
         }else{
-            console.log("Pas authoriser");
+            console.log("Pas autorisé");
         }
 
         }catch(error){  
@@ -200,6 +201,13 @@ async function getCategoryModal(){
 function showCategoriesModal(categories){
     const selectElement = document.getElementById("category");
     selectElement.innerHTML = "";
+    //Ajoute une premiére option vide.
+    const emptyOption = document.createElement("option");
+    emptyOption.value = "";
+    emptyOption.disabled = true;
+    emptyOption.selected = true;
+    selectElement.appendChild(emptyOption);
+
     categories.forEach(cat => {
         const optionElement = document.createElement("option");
         
@@ -223,9 +231,6 @@ function addPhoto(){
 
     buttonAddPhoto.addEventListener("click", openFileImgImport);
 
-
-
-
     /**
      * Fonction qui affiche la photo sélectionner avec gestions d'erreur.
      * @param {*} e 
@@ -233,7 +238,7 @@ function addPhoto(){
     function printPhoto(e){
         const fileImg = inputFile.files[0];// Récupère l'image à l'indice 0.
         const imgPreview = document.getElementById("imgPreview");
-
+        
         console.log(e);
 
         if(!fileImg.type){
@@ -284,12 +289,11 @@ function addWorks(){
     const title = document.getElementById("title");
     const category = document.getElementById("category");
     const formElement = document.getElementById("form-info-photo");
-    
 
     buttonSubmitWork.addEventListener("click", async (event) => {
         event.preventDefault();
         
-        //Vérification de la présence d'une image et d'un titre.
+        //Vérification de la présence d'une image, d'un titre et d'une catégorie.
         if(!fileImg.files[0]){
             alert("Veuillez insérer une image");
             return;
@@ -297,6 +301,11 @@ function addWorks(){
         if(!title.value){
             
             alert("Veuillez spécifier un titre");
+            return;
+        }
+        if(!category.value)
+        {
+            alert("Veuillez choisir une catégorie");
             return;
         }
         console.log(fileImg.files[0]);
@@ -318,7 +327,9 @@ function addWorks(){
                 if(response.ok){
                     alert("L'image été ajoutée avec succès !");
                     getWorksAndShow();
+                    buttonSubmitWork.style.backgroundColor = "#A7A7A7";
                     formElement.reset();
+                    category.value = ""; // Remet la catégorie sur la sélection par défaut.
                     switchPhotoDisplay(false);
                     
                 }
@@ -329,7 +340,56 @@ function addWorks(){
     });
 }
 
-//document.getElementById("button-form-add-photo").addEventListener("")
+function validateColorButton(){
+    const fileImg = document.getElementById("imgImport");
+    const title = document.getElementById("title");
+    const category = document.getElementById("category");
+    const buttonSubmitWork = document.getElementById("button-validate-add-photo");
 
+    function verifyChamps(){
+        if(!fileImg.files[0] || !title.value || (category.value === "")){
+        console.log("Un des champs est vide");
+        buttonSubmitWork.style.backgroundColor = "#A7A7A7";
+        }
+        else{
+        console.log("Les trois champs sont remplies");
+        buttonSubmitWork.style.backgroundColor = "#1D6154";
+        }  
+    }
+
+    fileImg.addEventListener("change", verifyChamps);
+    title.addEventListener("input", verifyChamps);
+    category.addEventListener("change", verifyChamps);
+}
+
+
+/****************************************** */
+/**
+ * Efface les éléments et affiche tous les travaux dans la class gallery.
+ * @param {Array} works - Représente les travaux.
+ */
+function showWorks(works){
+    const galleryElement = document.querySelector(".gallery");
+    galleryElement.innerHTML = "";
+
+    console.log("Passage dans la fonction");
+
+    for(let i = 0; i < works.length; i++){
+        const figureElement = document.createElement("figure");
+        const imgElement = document.createElement("img");
+        const figcaptionElement = document.createElement("figcaption");
+
+        imgElement.src = works[i].imageUrl;
+        imgElement.alt = works[i].title;
+        figcaptionElement.innerText = works[i].title;
+
+        figureElement.appendChild(imgElement);
+        figureElement.appendChild(figcaptionElement);
+        galleryElement.appendChild(figureElement);
+    }
+}
+
+
+validateColorButton();
 addWorks();
 addPhoto();
