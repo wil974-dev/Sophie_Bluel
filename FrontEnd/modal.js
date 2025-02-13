@@ -54,6 +54,8 @@ buttonAddPhoto.addEventListener("click", () => {
 
 //Gére le bouton retour sur la modal add photo.
 iconBack.addEventListener("click", () => {
+    document.getElementById("form-info-photo").reset();
+    document.getElementById("imgImport").value = "";
     switchPhotoDisplay(false);
     closeModal(modalAddPhoto);
     openModal(modalPhotoGallery);
@@ -250,10 +252,11 @@ function addPhoto(){
     function printPhoto(e){
         const fileImg = inputFile.files[0];// Récupère l'image à l'indice 0.
         const imgPreview = document.getElementById("imgPreview");
-        
-        console.log(e);
+        const ExFile = fileImg;
 
-        if(!fileImg.type){
+        console.log(e);
+        console.log("Le dossier file img est : ", fileImg);
+        if(!fileImg){
             alert("Aucun fichier sélectionner.");
         }
         
@@ -264,8 +267,9 @@ function addPhoto(){
             reader.onload = (event) => {
             imgPreview.src = event.target.result;
             switchPhotoDisplay(true);
-            
-            };}
+            };
+        }
+        
         else{
             alert("Veuillez choisir une image au format jpeg/png.");
         }
