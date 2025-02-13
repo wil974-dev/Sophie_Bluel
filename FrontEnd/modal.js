@@ -8,44 +8,15 @@ const buttonAddPhoto = document.getElementById("button-add-photo");
 const LinkOpenModal = document.getElementById("open-modal");
 const iconBack = document.querySelector(".icon-back");
 
- /****************Fonction***************/
-
-function openModal(modal){
-    modal.style.display = "flex";
-    modal.setAttribute("aria-hidden", "false");
-    modal.setAttribute("aria-modal", "true");
-    
-    //Je déplace le focus sur la modale pour que ne pas avoir d'erreur accessibilitée
-    modal.setAttribute("tabindex", "-1");
-    modal.focus();
-
-    switch(modal){
-        case modalPhotoGallery:
-            getWorksAndShow();
-            break;
-        case modalAddPhoto:
-            getCategoryModal();
-            break;
-    }
-}
-
-function closeModal(modal){
-    modal.style.display = "none";
-    modal.setAttribute("aria-hidden", "true");
-    modal.setAttribute("aria-modal", "false");
-
-    //Je remet le focus sur un élément visible
-    document.getElementById("open-modal").focus();
-}
-
 /***************Evénements****************/
 
-
+//Ouvre la modale modalPhotoGallery au clic sur le lien modifier.
 LinkOpenModal.addEventListener("click", () => {
     modalContainer.style.display = "flex";
     openModal(modalPhotoGallery);
 });
 
+//Ferme la modale au cliq sur l'icone représentant une croix.
 iconCloseModal.forEach((icon) => {
     icon.addEventListener("click", () => {
         modalContainer.style.display = "none";
@@ -60,7 +31,7 @@ iconCloseModal.forEach((icon) => {
 });
 
 
-//Fermeture de la modale quand on clique à l'extérieur
+//Fermeture de la modale quand on clic à l'extérieur.
 modalContainer.addEventListener("click", (event) => {
     if(!modalPhotoGallery.contains(event.target) && !modalAddPhoto.contains(event.target)){
         modalContainer.style.display = "none";
@@ -74,9 +45,7 @@ modalContainer.addEventListener("click", (event) => {
     }
 });
 
-
-
-//Gère le changement de modal quand le bouton ajouter photo est appuyé
+//Gère le changement de modal au clic sur le buttonAddPhoto.
 buttonAddPhoto.addEventListener("click", () => {
     closeModal(modalPhotoGallery);
     openModal(modalAddPhoto);
@@ -88,33 +57,73 @@ iconBack.addEventListener("click", () => {
     switchPhotoDisplay(false);
     closeModal(modalAddPhoto);
     openModal(modalPhotoGallery);
-    //Vide l'image si il à été ajouter.
-    //const formFileImg = document.querySelector(".form-add-photo");
-    //formFileImg.reset();
 })
 
 /********************Fonction affichage************************/
 
 /**
- * Récupére les travaux et les affiches.
+ * Récupére les travaux sur le serveur.
+ * @returns retourne une promesse pour la récupération des travaux.
+ */
+async function getWorksServer(){
+    try{
+        const response = await fetch("http://localhost:5678/api/works");
+
+        if(!response.ok){
+            throw new Error("La requête n'a pas aboutie.");
+        }
+        const works = await response.json();
+        return works;
+    }catch(error){
+        console.error("Erreur HTTP: ", error.message);
+    }
+}
+
+
+/**
+ * Affiche la modale entrer en paramètre
+ * @param {node} modal - choix entre modalAddPhoto ou modalPhotoGallery
+ */
+function openModal(modal){
+    modal.style.display = "flex";
+    modal.setAttribute("aria-hidden", "false");
+    modal.setAttribute("aria-modal", "true");
+    
+    //Je déplace le focus sur la modale pour que ne pas avoir d'erreur accessibilité
+    modal.setAttribute("tabindex", "-1");
+    modal.focus();
+
+    switch(modal){
+        case modalPhotoGallery:
+            getWorksAndShow();
+            break;
+        case modalAddPhoto:
+            getCategoryModal();
+            break;
+    }
+}
+
+/**
+ * Affiche la modale entrer en paramètre
+ * @param {node} modal - choix entre modalAddPhoto ou modalPhotoGallery
+ */
+function closeModal(modal){
+    modal.style.display = "none";
+    modal.setAttribute("aria-hidden", "true");
+    modal.setAttribute("aria-modal", "false");
+
+    //Je remet le focus sur un élément visible
+    document.getElementById("open-modal").focus();
+}
+
+/**
+ * Affiche les travaux dans la galery et la modale.
  * @returns Retourne une promesse
  */
 async function getWorksAndShow(){
-    try {
-        const reponse = await fetch("http://localhost:5678/api/works");
-        
-        if(!reponse.ok){
-            throw new Error(`Erreur HTTP : ${reponse.status}`);
-        }
-
-        const works = await reponse.json();
+        const works = await getWorksServer();
         showWorksDelete(works);
         showWorks(works);
-        return works;// Retourne une promesse.
-    }
-    catch(error){
-        console.error("Erreur : ", error.message);
-    }
 }
 
 /**
@@ -144,14 +153,15 @@ async function showWorksDelete(works){
         trashCanElement.addEventListener("click", async (event) => {
             event.stopPropagation();//Empêche la fermeture de la modale.
             deleteWork(works[i].id);//Supprime
-            const updateWorks = await getWorksAndShow();
+            const updateWorks = await getWorksServer();
             showWorksDelete(updateWorks);//Affichage des travaux restant
+            showWorks(updateWorks);
         });
     }
 }
 
 /**
- * Supprime le travail avec l'id correspondant à celui passer en paramètres.
+ * Supprime le travail avec l'id correspondant à celui passé en paramètres.
  * @param {number} id l'id de l'élément travail à supprimer.
  */
 async function deleteWork(id){
@@ -176,7 +186,8 @@ async function deleteWork(id){
 
 
 /**
- * Récupère les catégories sur le serveur.
+ * Récupère les catégories sur le serveur et les affiches avec la 
+ * fonction showCategoriesModal().
  */
 async function getCategoryModal(){
     try{
@@ -219,7 +230,8 @@ function showCategoriesModal(categories){
 }
 
 /**
- * 
+ * Récupère une photo sur le disque dur et l'affiche dans la
+ * modale avec la fonction printPhoto(e);
  */
 function addPhoto(){
     const inputFile = document.getElementById("imgImport");
@@ -232,7 +244,7 @@ function addPhoto(){
     buttonAddPhoto.addEventListener("click", openFileImgImport);
 
     /**
-     * Fonction qui affiche la photo sélectionner avec gestions d'erreur.
+     * Fonction qui affiche la photo sélectionnée avec gestions d'erreur.
      * @param {*} e 
      */
     function printPhoto(e){
@@ -264,7 +276,8 @@ function addPhoto(){
 }
 
 /**
- * 
+ * Permet de changer l'affichage dans la modale entre la
+ * photo sélectionner et le bouton ajouter une image.
  * @param {boolean} showImage - True pour afficher l'image et false pour afficher le boutton ajout de photo
  */
 function switchPhotoDisplay(showImage){
@@ -281,7 +294,8 @@ function switchPhotoDisplay(showImage){
 }
 
 /**
- * 
+ * Vérifie que toutes les informations sont correctes et
+ * ajoute le travail sur le serveur.
  */
 function addWorks(){
     const buttonSubmitWork = document.getElementById("button-validate-add-photo");
@@ -295,7 +309,7 @@ function addWorks(){
         
         //Vérification de la présence d'une image, d'un titre et d'une catégorie.
         if(!fileImg.files[0]){
-            alert("Veuillez insérer une image");
+            alert("Veuillez insérée une image");
             return;
         }
         if(!title.value){
@@ -340,6 +354,10 @@ function addWorks(){
     });
 }
 
+/**
+ * Permet de changer la couleur du bouton valider 
+ * si tous les champs nécessaires sont complétés.
+ */
 function validateColorButton(){
     const fileImg = document.getElementById("imgImport");
     const title = document.getElementById("title");
@@ -363,7 +381,6 @@ function validateColorButton(){
 }
 
 
-/****************************************** */
 /**
  * Efface les éléments et affiche tous les travaux dans la class gallery.
  * @param {Array} works - Représente les travaux.
@@ -389,6 +406,8 @@ function showWorks(works){
     }
 }
 
+
+/*************************Appel de fonction***********************/
 
 validateColorButton();
 addWorks();

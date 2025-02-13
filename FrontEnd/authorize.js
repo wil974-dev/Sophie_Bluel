@@ -1,5 +1,6 @@
-//Vérification que l'utilisateur est bien identifié pour rester sur la page d'édition.
-
+/**
+ * Vérification que l'utilisateur est bien identifié pour rester sur la page d'édition.
+ */
 function verifyAuthorize(){
     const token = localStorage.getItem("connectionToken");
     if(!token){
@@ -7,10 +8,6 @@ function verifyAuthorize(){
         window.location.href = "index.html";
     }
 }
-
-window.addEventListener("popstate", verifyAuthorize);// Navigation via l'historique
-window.addEventListener("hashchange", verifyAuthorize);//Changement de l'url
-window.addEventListener("load", verifyAuthorize);//Rechargement de la page
 
 /**
  * Déconnecte l'utilisateur et le renvoie à l'index.
@@ -23,5 +20,9 @@ function logOut(){
         window.location.href = "index.html";
     });
 }
+
+window.addEventListener("popstate", verifyAuthorize);// Navigation via l'historique
+window.addEventListener("hashchange", verifyAuthorize);//Changement de l'url
+window.addEventListener("load", verifyAuthorize);//Rechargement de la page
 
 logOut();

@@ -1,5 +1,5 @@
 /**
- * Récupère les travaux sur le serveur et les affiches avec
+ * Récupère les travaux sur le serveur et les affichés avec
  * la fonction showWorks().
  */
 async function getWorks(){
@@ -21,7 +21,7 @@ async function getWorks(){
 }
 
 /**
- * Récupère les categories des travaux et crée les boutons
+ * Récupère les catégories des travaux et crée les boutons
  * avec la fonction createButtonFilter().
  */
 async function getCategory(){
@@ -98,7 +98,7 @@ function createButtonFilter(category){
 }
 
 /**
- * Récupère les travaux et affichent ceux qui corresponde à la catégorie.
+ * Affiche les travaux correspondant à la catégorie.
  * @param {string} categoryName - la catégorie.
  */
 async function filterWorks(categoryName){
