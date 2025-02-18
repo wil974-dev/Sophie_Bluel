@@ -8,6 +8,7 @@ const buttonAddPhoto = document.getElementById("button-add-photo");
 const LinkOpenModal = document.getElementById("open-modal");
 const iconBack = document.querySelector(".icon-back");
 
+
 /***************Evénements****************/
 
 //Ouvre la modale modalPhotoGallery au clic sur le lien modifier.
@@ -26,6 +27,7 @@ iconCloseModal.forEach((icon) => {
     else if(modalAddPhoto.style.display === "flex"){
         closeModal(modalAddPhoto);
         switchPhotoDisplay(false);
+        resetFormAddPhoto();
     }
     })
 });
@@ -41,6 +43,7 @@ modalContainer.addEventListener("click", (event) => {
         }
         else if(modalAddPhoto.style.display === "flex"){
             closeModal(modalAddPhoto);
+            resetFormAddPhoto();
         }
     }
 });
@@ -54,8 +57,7 @@ buttonAddPhoto.addEventListener("click", () => {
 
 //Gére le bouton retour sur la modal add photo.
 iconBack.addEventListener("click", () => {
-    document.getElementById("form-info-photo").reset();
-    document.getElementById("imgImport").value = "";
+    resetFormAddPhoto();
     switchPhotoDisplay(false);
     closeModal(modalAddPhoto);
     openModal(modalPhotoGallery);
@@ -252,9 +254,7 @@ function addPhoto(){
     function printPhoto(e){
         const fileImg = inputFile.files[0];// Récupère l'image à l'indice 0.
         const imgPreview = document.getElementById("imgPreview");
-        const ExFile = fileImg;
 
-        console.log(e);
         console.log("Le dossier file img est : ", fileImg);
         if(!fileImg){
             alert("Aucun fichier sélectionner.");
@@ -306,7 +306,7 @@ function addWorks(){
     const fileImg = document.getElementById("imgImport");
     const title = document.getElementById("title");
     const category = document.getElementById("category");
-    const formElement = document.getElementById("form-info-photo");
+    
 
     buttonSubmitWork.addEventListener("click", async (event) => {
         event.preventDefault();
@@ -346,7 +346,7 @@ function addWorks(){
                     alert("L'image été ajoutée avec succès !");
                     getWorksAndShow();
                     buttonSubmitWork.style.backgroundColor = "#A7A7A7";
-                    formElement.reset();
+                    resetFormAddPhoto();
                     category.value = ""; // Remet la catégorie sur la sélection par défaut.
                     switchPhotoDisplay(false);
                     
@@ -410,6 +410,16 @@ function showWorks(works){
     }
 }
 
+/**
+ * Vide la photo et les champs dans la modale pour ajouter un travail au serveur.
+ */
+function resetFormAddPhoto(){
+    const imgImport = document.getElementById("imgImport");
+    const formInfoPhoto = document.getElementById("form-info-photo");
+    
+    formInfoPhoto.reset();
+    imgImport.value = "";
+}
 
 /*************************Appel de fonction***********************/
 

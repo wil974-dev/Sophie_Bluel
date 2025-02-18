@@ -80,7 +80,7 @@
 <!--Modal-->
 
 <div class="modal-container">
-	<aside id="modal-photo-gallery" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal-gallery" aria-modal="false">
+	<div id="modal-photo-gallery" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-gallery" aria-modal="false">
 		<i class="fa-solid fa-xmark icon-close"></i>	
 		<h3 id="title-gallery">Galerie photo</h3>
 		<div class="gallery-modal">
@@ -88,8 +88,8 @@
 		</div>
 		<div class="underline"></div>
 		<input type="button" value="Ajouter une photo" id="button-add-photo">
-	</aside>
-	<aside id="modal-add-photo" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-modal-add-photo" aria-modal="false">
+	</div>
+	<div id="modal-add-photo" class="modal" aria-hidden="true" role="dialog" aria-labelledby="title-add-photo" aria-modal="false">
 		<div class="header-icon">
 			<i class="fa-solid fa-arrow-left icon-back"></i>
 			<i class="fa-solid fa-xmark icon-close"></i>
@@ -98,7 +98,7 @@
 		<h3 id="title-add-photo">Ajout photo</h3>
 		<div class="add-photo-container">
 			<div class="view-photo" style="display: none;">
-				<img src="" alt="" id="imgPreview">
+				<img src="#" alt="" id="imgPreview">
 			</div>
 			<div class="form-add-photo">
 				<i class="fa-regular fa-image icon-add-photo" style="color: #B9C5CC;"></i>
@@ -116,7 +116,7 @@
 			<div class="underline-add-photo"></div>
 			<input type="submit" value="valider" id="button-validate-add-photo">
 		</form>
-	</aside>
+	</div>
 </div>
 
 </body>
