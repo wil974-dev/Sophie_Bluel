@@ -1,5 +1,5 @@
 /**
- * Récupère les travaux sur le serveur et les affichés avec
+ * Récupère les travaux sur le serveur et les affiche avec
  * la fonction showWorks().
  */
 async function getWorks(){
@@ -46,7 +46,7 @@ async function getCategory(){
 }
 
 /**
- * Efface les éléments et affiche tous les travaux dans la class gallery.
+ * Efface les éléments et affiche tous les travaux dans la classe gallery.
  * @param {Array} works - Représente les travaux.
  */
 function showWorks(works){
@@ -69,7 +69,7 @@ function showWorks(works){
 }
 
 /**
- * Créer un bouton filtre avec un évènement contenant une fonction de tri filterWorks.
+ * Crée un bouton filtre avec un évènement contenant une fonction de tri filterWorks.
  * @param {array} category - Correspond aux categories.
  */
 function createButtonFilter(category){

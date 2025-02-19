@@ -17,7 +17,7 @@ LinkOpenModal.addEventListener("click", () => {
     openModal(modalPhotoGallery);
 });
 
-//Ferme la modale au cliq sur l'icone représentant une croix.
+//Ferme la modale au clic sur l'icone représentant une croix.
 iconCloseModal.forEach((icon) => {
     icon.addEventListener("click", () => {
         modalContainer.style.display = "none";
@@ -55,7 +55,7 @@ buttonAddPhoto.addEventListener("click", () => {
 });
 
 
-//Gére le bouton retour sur la modal add photo.
+//Gère le bouton retour sur la modal add photo.
 iconBack.addEventListener("click", () => {
     resetFormAddPhoto();
     switchPhotoDisplay(false);
@@ -66,7 +66,7 @@ iconBack.addEventListener("click", () => {
 /********************Fonction affichage************************/
 
 /**
- * Récupére les travaux sur le serveur.
+ * Récupère les travaux sur le serveur.
  * @returns retourne une promesse pour la récupération des travaux.
  */
 async function getWorksServer(){
@@ -85,7 +85,7 @@ async function getWorksServer(){
 
 
 /**
- * Affiche la modale entrer en paramètre
+ * Affiche la modale entrée en paramètre
  * @param {node} modal - choix entre modalAddPhoto ou modalPhotoGallery
  */
 function openModal(modal){
@@ -108,7 +108,7 @@ function openModal(modal){
 }
 
 /**
- * Affiche la modale entrer en paramètre
+ * Affiche la modale entrée en paramètre
  * @param {node} modal - choix entre modalAddPhoto ou modalPhotoGallery
  */
 function closeModal(modal){
@@ -132,7 +132,7 @@ async function getWorksAndShow(){
 
 /**
  * Affiche les travaux avec une icone de suppression.
- * @param {array} works
+ * @param {array} works - liste des travaux
  */
 async function showWorksDelete(works){
     const galleryModalElement = document.querySelector(".gallery-modal");
@@ -178,33 +178,33 @@ async function deleteWork(id){
             });
 
         if(reponse.ok){
-            console.log("Le travail a été supprimé.");
+            alert("Le travail a été supprimé.");
         }else{
-            console.log("Pas autorisé");
+            alert("Pas autorisé");
         }
 
         }catch(error){  
-        console.log("erreur: ", error.message);
+        console.error("erreur: ", error.message);
     }
 }
 
 
 /**
- * Récupère les catégories sur le serveur et les affiches avec la 
+ * Récupère les catégories sur le serveur et les affiche avec la 
  * fonction showCategoriesModal().
  */
 async function getCategoryModal(){
     try{
         const reponse = await fetch("http://localhost:5678/api/categories");
         if(!reponse.ok){
-            throw new Error("Erreur lors de la récupération des categories.");
+            throw new Error("Erreur lors de la récupération des catégories.");
         }
 
         const categories = await reponse.json();
         showCategoriesModal(categories);
 
     }catch(error){
-        console.log("Erreur: ", error.message);
+        console.error("Erreur: ", error.message);
     }
   
 }
@@ -255,7 +255,6 @@ function addPhoto(){
         const fileImg = inputFile.files[0];// Récupère l'image à l'indice 0.
         const imgPreview = document.getElementById("imgPreview");
 
-        console.log("Le dossier file img est : ", fileImg);
         if(!fileImg){
             alert("Aucun fichier sélectionner.");
         }
@@ -313,11 +312,10 @@ function addWorks(){
         
         //Vérification de la présence d'une image, d'un titre et d'une catégorie.
         if(!fileImg.files[0]){
-            alert("Veuillez insérée une image");
+            alert("Veuillez insérer une image");
             return;
         }
         if(!title.value){
-            
             alert("Veuillez spécifier un titre");
             return;
         }
@@ -326,7 +324,6 @@ function addWorks(){
             alert("Veuillez choisir une catégorie");
             return;
         }
-        console.log(fileImg.files[0]);
         const formData = new FormData();
         formData.append("image", fileImg.files[0]);
         formData.append("title", title.value);
@@ -352,14 +349,14 @@ function addWorks(){
                     
                 }
             }catch(error){
-                console.log("Erreur lors de l'ajout :", error);
+                console.error("Erreur lors de l'ajout :", error.message);
                 alert("Une erreur est survenue lors de l'envoi");
             }
     });
 }
 
 /**
- * Permet de changer la couleur du bouton valider 
+ * Permet de changer la couleur du bouton de validation 
  * si tous les champs nécessaires sont complétés.
  */
 function validateColorButton(){
@@ -370,11 +367,9 @@ function validateColorButton(){
 
     function verifyChamps(){
         if(!fileImg.files[0] || !title.value || (category.value === "")){
-        console.log("Un des champs est vide");
         buttonSubmitWork.style.backgroundColor = "#A7A7A7";
         }
         else{
-        console.log("Les trois champs sont remplies");
         buttonSubmitWork.style.backgroundColor = "#1D6154";
         }  
     }
@@ -393,8 +388,6 @@ function showWorks(works){
     const galleryElement = document.querySelector(".gallery");
     galleryElement.innerHTML = "";
 
-    console.log("Passage dans la fonction");
-
     for(let i = 0; i < works.length; i++){
         const figureElement = document.createElement("figure");
         const imgElement = document.createElement("img");
@@ -411,14 +404,17 @@ function showWorks(works){
 }
 
 /**
- * Vide la photo et les champs dans la modale pour ajouter un travail au serveur.
+ * Vide la photo et les champs dans la modale pour ajouter un travail au serveur
+ * et remet la couleur grisé pour le bouton valider.
  */
 function resetFormAddPhoto(){
     const imgImport = document.getElementById("imgImport");
     const formInfoPhoto = document.getElementById("form-info-photo");
+    const buttonSubmitWork = document.getElementById("button-validate-add-photo");
     
     formInfoPhoto.reset();
     imgImport.value = "";
+    buttonSubmitWork.style.backgroundColor = "#A7A7A7";
 }
 
 /*************************Appel de fonction***********************/

@@ -10,7 +10,7 @@ function verifyAuthorize(){
 }
 
 /**
- * Déconnecte l'utilisateur et le renvoie à l'index.
+ * Déconnecte l'utilisateur et le renvoie à la page d'accueil.
  */
 function logOut(){
     const linkLogOut = document.getElementById("logout");
@@ -21,8 +21,8 @@ function logOut(){
     });
 }
 
-window.addEventListener("popstate", verifyAuthorize);// Navigation via l'historique
-window.addEventListener("hashchange", verifyAuthorize);//Changement de l'url
+window.addEventListener("popstate", verifyAuthorize);//Navigation via l'historique
+window.addEventListener("hashchange", verifyAuthorize);//Changement de l'URL
 window.addEventListener("load", verifyAuthorize);//Rechargement de la page
 
 logOut();

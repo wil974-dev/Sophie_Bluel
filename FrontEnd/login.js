@@ -1,4 +1,4 @@
-//Gestionnaire de connection.
+//Gestionnaire de connexion.
 document.querySelector("form").addEventListener("submit", async (event) => {
     event.preventDefault(); // Empêche le rechargement de la page.
 
@@ -12,8 +12,13 @@ document.querySelector("form").addEventListener("submit", async (event) => {
             body: JSON.stringify({ email, password }),
         });
 
+        if(response.status === 401 || response.status === 404 ){
+            alert("Combinaison utilisateur/mot de passe incorrecte");
+            return;
+        }
+
         if (!response.ok) {
-            throw new Error("Combinaison utilisateur/mot de passe incorrecte");
+            throw new Error("Echec de la requête");
         }
 
         const infoConnection = await response.json();
@@ -21,13 +26,9 @@ document.querySelector("form").addEventListener("submit", async (event) => {
         localStorage.setItem("connectionToken", infoConnection.token); // Stocker le token.
         window.location.href = "edition.html"; // Redirection vers la page d'édition.
     } catch (error) {
-        if(error.message === "Failed to fetch"){
-            alert("Echec de la connexion");
-        }
-        else{
-            alert(error.message);
+            console.error("Erreur : ", error.message);
+            alert("Une erreur est survenue veuiller réessayer");
         }
        
-    }
-});
+    });
 
