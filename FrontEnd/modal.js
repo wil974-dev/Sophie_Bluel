@@ -258,6 +258,12 @@ function addPhoto(){
         if(!fileImg){
             alert("Aucun fichier sélectionner.");
         }
+
+        const maxSize = 4194304;
+        if(fileImg.size > maxSize){
+            alert("Taille de l'image supérieur à 4 Mo, veuillez sélectionnez une image de moins de 4 Mo");
+            return;
+        }
         
         if(fileImg.type.startsWith("image/")){
             const reader = new FileReader();

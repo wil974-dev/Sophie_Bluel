@@ -25,6 +25,10 @@ async function getWorks(){
  * avec la fonction createButtonFilter().
  */
 async function getCategory(){
+    if(window.location.pathname.includes("edition.htlm")){
+        return; // Ne lance pas la suite du code si on est sur la page edition.
+    }
+
     try {
         const reponse = await fetch("http://localhost:5678/api/categories");
 
@@ -75,7 +79,10 @@ function showWorks(works){
 function createButtonFilter(category){
     
     const filterElement = document.querySelector(".filter");
-    
+    if(!filterElement){
+        return; //Vérifie la présence de l'élément dans le dom.
+    }
+
     category.forEach(category => {
         const inputElement = document.createElement("input");
 
@@ -104,11 +111,8 @@ function createButtonFilter(category){
 async function filterWorks(categoryName){
     const works = await getWorks();
     const listeWorks = works.filter(work => work.category.name === categoryName);
-
-    const galleryElement = document.querySelector(".gallery");
         
     showWorks(listeWorks);
-
 }
 
 
